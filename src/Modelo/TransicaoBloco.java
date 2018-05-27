@@ -6,18 +6,18 @@ package Modelo;
  */
 public class TransicaoBloco extends Transicao{
     
-    private bloco bloco;
+    private String bloco;
 
-    public TransicaoBloco(bloco bloco, Integer origem, Integer destino) {
+    public TransicaoBloco(String bloco, Integer origem, Integer destino) {
         super(origem, destino);
         this.bloco = bloco;
     }
 
-    public bloco getBloco() {
+    public String getBloco() {
         return bloco;
     }
 
-    public void setBloco(bloco bloco) {
+    public void setBloco(String bloco) {
         this.bloco = bloco;
     }    
 }

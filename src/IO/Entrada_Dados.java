@@ -1,6 +1,7 @@
 package IO;
 
 import Modelo.Transicao;
+import Modelo.TransicaoBloco;
 import Modelo.TransicaoSimples;
 import Modelo.bloco;
 import java.io.BufferedReader;
@@ -23,7 +24,6 @@ public class Entrada_Dados {
     //=================Leitura=================================================//
     public boolean Leitura_Dados(File Caminho, Map<String, bloco> blocos) {
         ArrayList<String> tokens;
-        StringBuilder builder;
         ArrayList<Transicao> transicoes;
 
         try {
@@ -31,6 +31,8 @@ public class Entrada_Dados {
             //instanciando o leitor
             BufferedReader buffer = new BufferedReader(new FileReader(Caminho));
 
+            Integer origem;
+            Integer destino;
             //linha corrente
             String linha;
 
@@ -52,6 +54,7 @@ public class Entrada_Dados {
 
                     //começando a leitura do bloco
                     if (linha.contains("bloco")) {
+
                         //DEBUG
                         System.out.println(linha);
                         System.out.println("");
@@ -63,14 +66,13 @@ public class Entrada_Dados {
                         com o buffer eu continuo a ler e construir o bloco
                          */
 
-                        /*
+ /*
                         Criando o bloco
                          */
                         linha = linha.trim();
                         bloco novo_bloco = new bloco();
 
                         tokens = new ArrayList<>();
-                        builder = new StringBuilder();
                         for (String palavra : linha.split(" ")) {
                             if (!(palavra.equals("−−"))) {
                                 tokens.add(palavra);
@@ -78,7 +80,12 @@ public class Entrada_Dados {
                         }
 
                         //Setando o nome do bloco
-                        novo_bloco.setNome(tokens.get(1));
+                        if (tokens.get(1).length() <= 16) {
+                            novo_bloco.setNome(tokens.get(1));
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Tamanho maior que o máximo permitido!");
+                            return false;
+                        }
 
                         //setando e verificando o estado inicial
                         try {
@@ -87,82 +94,122 @@ public class Entrada_Dados {
                             JOptionPane.showMessageDialog(null, e.getMessage());
                             return false;
                         }
-                        transicoes = new ArrayList<Transicao>();
+                        transicoes = new ArrayList<>();
                         linha = buffer.readLine();
                         while (!(linha.contains("fim")) && buffer.ready()) {
 
-                            //limpando as tabulações
-                            linha = linha.trim();
+                            if (!(linha.trim().equals(""))) {
+                                //limpando as tabulações
+                                linha = linha.trim();
 
-                            /*
+                                /*
                             Pegando cada parte da linha que estiver seprado 
                             por um espaço
-                             */
-                            tokens = new ArrayList<>();
-                            builder = new StringBuilder();
-                            for (String palavra : linha.split(" ")) {
-                                if (!(palavra.equals("−−"))) {
-                                    tokens.add(palavra);
+                                 */
+                                tokens = new ArrayList<>();
+                                for (String palavra : linha.split(" ")) {
+                                    if (!(palavra.equals("−−"))) {
+                                        tokens.add(palavra);
+                                    }
                                 }
-                            }
-                            System.out.println(tokens.size());
+                                System.out.println(tokens.size());
 
-                            /*
-                            Verificando qual tipo de transição preciso adotar
-                             */
-                            switch (tokens.size()) {
                                 /*
+                            Verificando qual tipo de transição preciso adotar
+                                 */
+                                switch (tokens.size()) {
+                                    /*
                                 caso tenha uma transicao do tipo que nao seja 
                                 de bloco
-                                 */
-                                case 5:
-                                    //verificando se a origem está correta
-                                    Integer origem;
-                                    Integer destino;
-                                    try {
-                                        origem = Integer.parseInt(tokens.get(0));
-
-                                        if (tokens.get(4).equals("retorne")) {
-                                            destino = -1;
-                                        } else if (tokens.get(4).equals("pare")) {
-                                            destino = -2;
-                                        } else {
-                                            destino = Integer.parseInt(tokens.get(4));
+                                     */
+                                    case 5:
+                                        //verificando se a origem está correta
+                                        try {
+                                            origem = Integer.parseInt(tokens.get(0));
+                                            if (origem > 9999 || origem < -2) {
+                                                JOptionPane.showMessageDialog(null, "ID do estado fora do permitido!");
+                                                return false;
+                                            }
+                                            switch (tokens.get(4)) {
+                                                case "retorne":
+                                                    destino = -1;
+                                                    break;
+                                                case "pare":
+                                                    destino = -2;
+                                                    break;
+                                                default:
+                                                    destino = Integer.parseInt(tokens.get(4));
+                                                    if (destino > 9999  || destino < -2) {
+                                                        JOptionPane.showMessageDialog(null, "ID do estado fora do permitido!");
+                                                        return false;
+                                                    }
+                                                    break;
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            JOptionPane.showMessageDialog(null, e.getMessage());
+                                            return false;
                                         }
-                                    } catch (NumberFormatException e) {
-                                        JOptionPane.showMessageDialog(null, e.getMessage());
-                                        return false;
-                                    }
 
-                                    String leitura = tokens.get(1);
-                                    String escrita = tokens.get(2);
+                                        String leitura = tokens.get(1);
+                                        String escrita = tokens.get(2);
 
-                                    String direcao = tokens.get(3);
+                                        String direcao = tokens.get(3);
 
-                                    //verificando a direção
-                                    if ((!(direcao.equals("i")))
-                                            || (!(direcao.equals("e")))
-                                            || (!(direcao.equals("d")))) {
-                                        JOptionPane.showMessageDialog(null, "Existe uma direção inválida");
-                                        return false;
-                                    }
+                                        //verificando a direção
+                                        if ((!(direcao.equals("i")))
+                                                && (!(direcao.equals("e")))
+                                                && (!(direcao.equals("d")))) {
+                                            JOptionPane.showMessageDialog(null, "Existe uma direção inválida");
+                                            return false;
+                                        }
 
-                                    TransicaoSimples tran = new TransicaoSimples(leitura, direcao, escrita, origem, destino);
+                                        //montando uma transicao Simples, ou seja sem ser de bloco
+                                        TransicaoSimples tran = new TransicaoSimples(leitura, direcao, escrita, origem, destino);
 
-                                    transicoes.add(tran);
-                                    break;
-                                /*
+                                        transicoes.add(tran);
+                                        break;
+                                    /*
                                 caso tenha uma transicao do tipo que seja de bloco    
-                                 */
-                                case 3:
-                                    break;
+                                     */
+                                    case 3:
+                                        try {
+                                            origem = Integer.parseInt(tokens.get(0));
+                                            if (origem > 9999 || origem < -2 ) {
+                                                JOptionPane.showMessageDialog(null, "ID do estado fora do permitido!");
+                                                return false;
+                                            }
+                                            switch (tokens.get(2)) {
+                                                case "retorne":
+                                                    destino = -1;
+                                                    break;
+                                                case "pare":
+                                                    destino = -2;
+                                                    break;
+                                                default:
+                                                    destino = Integer.parseInt(tokens.get(2));
+                                                    if (destino > 9999 || destino < -2) {
+                                                        JOptionPane.showMessageDialog(null, "ID do estado fora do permitido!");
+                                                        return false;
+                                                    }
+                                                    break;
+                                            }
+                                        } catch (NumberFormatException e) {
+                                            JOptionPane.showMessageDialog(null, e.getMessage());
+                                            return false;
+                                        }
+                                        
+                                        TransicaoBloco trans = new TransicaoBloco(tokens.get(1), origem, destino);
+                                        transicoes.add(trans);
+                                        break;
+                                }
                             }
 
                             //Lendo a linha
                             linha = buffer.readLine();
                             System.out.println(linha);
                         }
-
+                        
+                        novo_bloco.setTransicoes(transicoes);
                         blocos.put(novo_bloco.getNome(), novo_bloco);
                         System.out.println("Fim da Construção do bloco");
                     }
