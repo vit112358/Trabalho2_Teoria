@@ -9,7 +9,7 @@ public class TransicaoSimples extends Transicao{
     private String leitura;
     private String direcao_cabecote;
     private String escrita;
-
+    
     public TransicaoSimples(String leitura, String direcao_cabecote, String escrita, Integer origem, Integer destino) {
         super(origem, destino);
         this.leitura = leitura;

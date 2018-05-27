@@ -4,6 +4,7 @@ import IO.Entrada_Dados;
 import Modelo.bloco;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -21,7 +22,7 @@ public class Trabalho_Teoria {
         String del2 = ")";
         
         //instanciando lista de blocos
-        HashMap<String, bloco> lista_blocos = new HashMap<>();
+        Map<String, bloco> lista_blocos = new HashMap<>();
         
         //lendo arquivo
         Entrada_Dados IO = new Entrada_Dados();

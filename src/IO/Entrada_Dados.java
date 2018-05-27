@@ -1,5 +1,7 @@
 package IO;
 
+import Modelo.Transicao;
+import Modelo.TransicaoSimples;
 import Modelo.bloco;
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -19,9 +21,10 @@ import javax.swing.JOptionPane;
 public class Entrada_Dados {
 
     //=================Leitura=================================================//
-    public boolean Leitura_Dados(File Caminho, HashMap<String, bloco> blocos) {
+    public boolean Leitura_Dados(File Caminho, Map<String, bloco> blocos) {
         ArrayList<String> tokens;
         StringBuilder builder;
+        ArrayList<Transicao> transicoes;
 
         try {
 
@@ -60,7 +63,7 @@ public class Entrada_Dados {
                         com o buffer eu continuo a ler e construir o bloco
                          */
 
- /*
+                        /*
                         Criando o bloco
                          */
                         linha = linha.trim();
@@ -76,7 +79,7 @@ public class Entrada_Dados {
 
                         //Setando o nome do bloco
                         novo_bloco.setNome(tokens.get(1));
-                        
+
                         //setando e verificando o estado inicial
                         try {
                             novo_bloco.setEstado_inicial(Integer.parseInt(tokens.get(2)));
@@ -84,7 +87,7 @@ public class Entrada_Dados {
                             JOptionPane.showMessageDialog(null, e.getMessage());
                             return false;
                         }
-
+                        transicoes = new ArrayList<Transicao>();
                         linha = buffer.readLine();
                         while (!(linha.contains("fim")) && buffer.ready()) {
 
@@ -113,12 +116,40 @@ public class Entrada_Dados {
                                 de bloco
                                  */
                                 case 5:
+                                    //verificando se a origem está correta
+                                    Integer origem;
+                                    Integer destino;
                                     try {
-                                        Integer origem = Integer.parseInt(tokens.get(0));
+                                        origem = Integer.parseInt(tokens.get(0));
+
+                                        if (tokens.get(4).equals("retorne")) {
+                                            destino = -1;
+                                        } else if (tokens.get(4).equals("pare")) {
+                                            destino = -2;
+                                        } else {
+                                            destino = Integer.parseInt(tokens.get(4));
+                                        }
                                     } catch (NumberFormatException e) {
                                         JOptionPane.showMessageDialog(null, e.getMessage());
                                         return false;
                                     }
+
+                                    String leitura = tokens.get(1);
+                                    String escrita = tokens.get(2);
+
+                                    String direcao = tokens.get(3);
+
+                                    //verificando a direção
+                                    if ((!(direcao.equals("i")))
+                                            || (!(direcao.equals("e")))
+                                            || (!(direcao.equals("d")))) {
+                                        JOptionPane.showMessageDialog(null, "Existe uma direção inválida");
+                                        return false;
+                                    }
+
+                                    TransicaoSimples tran = new TransicaoSimples(leitura, direcao, escrita, origem, destino);
+
+                                    transicoes.add(tran);
                                     break;
                                 /*
                                 caso tenha uma transicao do tipo que seja de bloco    
@@ -132,6 +163,7 @@ public class Entrada_Dados {
                             System.out.println(linha);
                         }
 
+                        blocos.put(novo_bloco.getNome(), novo_bloco);
                         System.out.println("Fim da Construção do bloco");
                     }
 
