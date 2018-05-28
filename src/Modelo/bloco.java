@@ -10,8 +10,9 @@ public class bloco {
     private String nome;
     private Integer estado_inicial;
     
-    private ArrayList<Transicao> transicoes = new ArrayList<>();
-
+    private ArrayList<TransicaoBloco> transicoesBlocos = new ArrayList<>();
+    private ArrayList<TransicaoSimples> transicoesSimples = new ArrayList<>();
+    
     public bloco() {
     }
 
@@ -36,12 +37,22 @@ public class bloco {
         this.estado_inicial = estado_inicial;
     }
 
-    public ArrayList<Transicao> getTransicoes() {
-        return transicoes;
+    public ArrayList<TransicaoBloco> getTransicoesBlocos() {
+        return transicoesBlocos;
     }
 
-    public void setTransicoes(ArrayList<Transicao> transicoes) {
-        this.transicoes = transicoes;
+    public void setTransicoesBlocos(ArrayList<TransicaoBloco> transicoesBlocos) {
+        this.transicoesBlocos = transicoesBlocos;
     }
+
+    public ArrayList<TransicaoSimples> getTransicoesSimples() {
+        return transicoesSimples;
+    }
+
+    public void setTransicoesSimples(ArrayList<TransicaoSimples> transicoesSimples) {
+        this.transicoesSimples = transicoesSimples;
+    }
+
+    
 
 }

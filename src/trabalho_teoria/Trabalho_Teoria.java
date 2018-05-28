@@ -1,6 +1,7 @@
 package trabalho_teoria;
 
 import IO.Entrada_Dados;
+import Modelo.MT;
 import Modelo.bloco;
 import java.io.File;
 import java.util.ArrayList;
@@ -21,8 +22,7 @@ public class Trabalho_Teoria {
     public static void main(String[] args) {
         
         //Delimitadores
-        String del1 = "(";
-        String del2 = ")";
+        String delimitadores = "()";
         
         //instanciando lista de blocos
         Map<String, bloco> lista_blocos = new HashMap<>();
@@ -31,7 +31,7 @@ public class Trabalho_Teoria {
         String palavra;
         
         //contador de passos;
-        int contador;
+        int contador=-1;
         
         //========Instanciaçoes e variáveis=====================================
         
@@ -56,6 +56,10 @@ public class Trabalho_Teoria {
         if (IO.Leitura_Dados(arquivo, lista_blocos)) {
             System.out.println("Legal");
         }else System.out.println("Erro");
+        
+        MT mt = new MT();
+        mt.computacao(palavra, lista_blocos, contador, false, false, delimitadores);
+        System.out.println("olá");
     }
     
 }

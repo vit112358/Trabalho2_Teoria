@@ -1,6 +1,5 @@
 package IO;
 
-import Modelo.Transicao;
 import Modelo.TransicaoBloco;
 import Modelo.TransicaoSimples;
 import Modelo.bloco;
@@ -24,7 +23,6 @@ public class Entrada_Dados {
     //=================Leitura=================================================//
     public boolean Leitura_Dados(File Caminho, Map<String, bloco> blocos) {
         ArrayList<String> tokens;
-        ArrayList<Transicao> transicoes;
 
         try {
 
@@ -35,6 +33,12 @@ public class Entrada_Dados {
             Integer destino;
             //linha corrente
             String linha;
+
+            TransicaoSimples tran;
+            TransicaoBloco trans;
+
+            ArrayList<TransicaoSimples> transSimples;
+            ArrayList<TransicaoBloco> transBlocos;
 
             try {
                 //Enquanto eu conseguir ler o arquivo faça
@@ -71,6 +75,8 @@ public class Entrada_Dados {
                          */
                         linha = linha.trim();
                         bloco novo_bloco = new bloco();
+                        transSimples = new ArrayList<>();
+                        transBlocos = new ArrayList<>();
 
                         tokens = new ArrayList<>();
                         for (String palavra : linha.split(" ")) {
@@ -94,7 +100,6 @@ public class Entrada_Dados {
                             JOptionPane.showMessageDialog(null, e.getMessage());
                             return false;
                         }
-                        transicoes = new ArrayList<>();
                         linha = buffer.readLine();
                         while (!(linha.contains("fim")) && buffer.ready()) {
 
@@ -139,7 +144,7 @@ public class Entrada_Dados {
                                                     break;
                                                 default:
                                                     destino = Integer.parseInt(tokens.get(4));
-                                                    if (destino > 9999  || destino < -2) {
+                                                    if (destino > 9999 || destino < -2) {
                                                         JOptionPane.showMessageDialog(null, "ID do estado fora do permitido!");
                                                         return false;
                                                     }
@@ -164,9 +169,8 @@ public class Entrada_Dados {
                                         }
 
                                         //montando uma transicao Simples, ou seja sem ser de bloco
-                                        TransicaoSimples tran = new TransicaoSimples(leitura, direcao, escrita, origem, destino);
-
-                                        transicoes.add(tran);
+                                        tran = new TransicaoSimples(origem, destino, leitura, direcao, escrita);
+                                        transSimples.add(tran);
                                         break;
                                     /*
                                 caso tenha uma transicao do tipo que seja de bloco    
@@ -174,7 +178,7 @@ public class Entrada_Dados {
                                     case 3:
                                         try {
                                             origem = Integer.parseInt(tokens.get(0));
-                                            if (origem > 9999 || origem < -2 ) {
+                                            if (origem > 9999 || origem < -2) {
                                                 JOptionPane.showMessageDialog(null, "ID do estado fora do permitido!");
                                                 return false;
                                             }
@@ -197,9 +201,9 @@ public class Entrada_Dados {
                                             JOptionPane.showMessageDialog(null, e.getMessage());
                                             return false;
                                         }
-                                        
-                                        TransicaoBloco trans = new TransicaoBloco(tokens.get(1), origem, destino);
-                                        transicoes.add(trans);
+
+                                        trans = new TransicaoBloco(origem, destino, tokens.get(1));
+                                        transBlocos.add(trans);
                                         break;
                                 }
                             }
@@ -207,9 +211,10 @@ public class Entrada_Dados {
                             //Lendo a linha
                             linha = buffer.readLine();
                             System.out.println(linha);
+
                         }
-                        
-                        novo_bloco.setTransicoes(transicoes);
+                        novo_bloco.setTransicoesSimples(transSimples);
+                        novo_bloco.setTransicoesBlocos(transBlocos);
                         blocos.put(novo_bloco.getNome(), novo_bloco);
                         System.out.println("Fim da Construção do bloco");
                     }

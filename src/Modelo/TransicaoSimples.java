@@ -4,17 +4,39 @@ package Modelo;
  *
  * @author Vitor
  */
-public class TransicaoSimples extends Transicao{
+public class TransicaoSimples{
     
+    private Integer origem;
+    private Integer destino;
     private String leitura;
     private String direcao_cabecote;
     private String escrita;
-    
-    public TransicaoSimples(String leitura, String direcao_cabecote, String escrita, Integer origem, Integer destino) {
-        super(origem, destino);
+
+    public TransicaoSimples() {
+    }
+
+    public TransicaoSimples(Integer origem, Integer destino, String leitura, String direcao_cabecote, String escrita) {
+        this.origem = origem;
+        this.destino = destino;
         this.leitura = leitura;
         this.direcao_cabecote = direcao_cabecote;
         this.escrita = escrita;
+    }
+
+    public Integer getOrigem() {
+        return origem;
+    }
+
+    public void setOrigem(Integer origem) {
+        this.origem = origem;
+    }
+
+    public Integer getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Integer destino) {
+        this.destino = destino;
     }
 
     public String getLeitura() {
@@ -40,5 +62,7 @@ public class TransicaoSimples extends Transicao{
     public void setEscrita(String escrita) {
         this.escrita = escrita;
     }
+    
+    
 
 }
