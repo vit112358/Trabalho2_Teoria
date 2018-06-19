@@ -4,7 +4,6 @@ import IO.Entrada_Dados;
 import Modelo.MT;
 import Modelo.bloco;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -54,11 +53,13 @@ public class Trabalho_Teoria {
         Entrada_Dados IO = new Entrada_Dados();
         File arquivo = new File("C://Users//Vitor//Desktop//palindromo.MT");
         if (IO.Leitura_Dados(arquivo, lista_blocos)) {
-            System.out.println("Legal");
-        }else System.out.println("Erro");
+            //System.out.println("Legal");
+        }
+        //else System.out.println("Erro");
         
         MT mt = new MT();
-        mt.computacao(palavra, lista_blocos, contador, false, false, delimitadores);
+        mt.computacaoVerbose(palavra, lista_blocos, contador, delimitadores);
+        //mt.computacaoResume(palavra, lista_blocos, contador, delimitadores);
         System.out.println("olá");
     }
     

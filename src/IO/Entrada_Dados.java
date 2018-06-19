@@ -48,22 +48,22 @@ public class Entrada_Dados {
 
                     //verificando comentários e pegando a parte válida da linha
                     if (linha.contains(";")) {
-                        System.out.println("Comentário: " + linha);
+                        //System.out.println("Comentário: " + linha);
                         linha = linha.substring(0, linha.indexOf(";"));
-                        System.out.print("Parte válida: ");
+                        //System.out.print("Parte válida: ");
                         linha = linha.trim();
-                        System.out.println(linha);
-                        System.out.println("");
+                        //System.out.println(linha);
+                        //System.out.println("");
                     }
 
                     //começando a leitura do bloco
                     if (linha.contains("bloco")) {
 
                         //DEBUG
-                        System.out.println(linha);
-                        System.out.println("");
-                        System.out.println("");
-                        System.out.println("Inicio da Construção do bloco");
+                        //System.out.println(linha);
+                        //System.out.println("");
+                        //System.out.println("");
+                        //System.out.println("Inicio da Construção do bloco");
                         //começo a construir o bloco
                         /*
                         Enquanto a linha nao ler o fim do bloco e estiver tudo certo 
@@ -117,10 +117,10 @@ public class Entrada_Dados {
                                         tokens.add(palavra);
                                     }
                                 }
-                                System.out.println(tokens.size());
+                                //System.out.println(tokens.size());
 
                                 /*
-                            Verificando qual tipo de transição preciso adotar
+                                Verificando qual tipo de transição preciso adotar
                                  */
                                 switch (tokens.size()) {
                                     /*
@@ -210,13 +210,13 @@ public class Entrada_Dados {
 
                             //Lendo a linha
                             linha = buffer.readLine();
-                            System.out.println(linha);
+                            //System.out.println(linha);
 
                         }
                         novo_bloco.setTransicoesSimples(transSimples);
                         novo_bloco.setTransicoesBlocos(transBlocos);
                         blocos.put(novo_bloco.getNome(), novo_bloco);
-                        System.out.println("Fim da Construção do bloco");
+                        //System.out.println("Fim da Construção do bloco");
                     }
 
                 }
