@@ -92,7 +92,12 @@ public class MT {
                         || (t.getOrigem().equals(estado_atual) && t.getLeitura().equals("*"))) {
                     estado_atual = t.getDestino();
                     if (fita.get(cabecote).equals(t.getLeitura().charAt(0))) {
-                        fita.set(cabecote, t.getEscrita().charAt(0));
+                        if (t.getEscrita().equals("*")) {
+
+                        } else {
+                            fita.set(cabecote, t.getEscrita().charAt(0));
+                        }
+                  
                         System.out.print(blocoAtual.getNome() + ".");
                         System.out.print(estado_atual + ":");
 
@@ -197,7 +202,7 @@ public class MT {
                                                 System.out.print(c);
                                             });
                                             System.out.println("");
-                                            
+
                                             if (t1.getDirecao_cabecote().equals("d")) {
                                                 cabecote++;
                                             } else if (t1.getDirecao_cabecote().equals("e")) {
@@ -210,6 +215,7 @@ public class MT {
                                                     if (!t1.getEscrita().equals("*")) {
                                                         fita.set(cabecote, t1.getEscrita().charAt(0));
                                                     }
+                                                    estado_atual = t1.getDestino();
                                                     System.out.print(blocoAtual.getNome() + ".");
                                                     System.out.print(estado_atual + ":");
                                                     fita.forEach((c) -> {
@@ -217,7 +223,7 @@ public class MT {
                                                     });
                                                     System.out.println("");
                                                 }
-                                                
+
                                                 if (t1.getDirecao_cabecote().equals("d")) {
                                                     cabecote++;
                                                 } else if (t1.getDirecao_cabecote().equals("e")) {
