@@ -21,6 +21,14 @@ import javax.swing.JOptionPane;
 public class Entrada_Dados {
 
     //=================Leitura=================================================//
+
+    /**
+     * Fará a leitura de um arquivo que define a MT, cujo o formato deverá ser
+     * .MT
+     * @param Caminho caminho do arquivos
+     * @param blocos Map onde será armazenado os blocos
+     * @return True-se a leitura for feita com sucesso, caso contrário retorna falso
+     */
     public boolean Leitura_Dados(File Caminho, Map<String, bloco> blocos) {
         ArrayList<String> tokens;
 
@@ -48,23 +56,13 @@ public class Entrada_Dados {
 
                     //verificando comentários e pegando a parte válida da linha
                     if (linha.contains(";")) {
-                        //System.out.println("Comentário: " + linha);
                         linha = linha.substring(0, linha.indexOf(";"));
-                        //System.out.print("Parte válida: ");
                         linha = linha.trim();
-                        //System.out.println(linha);
-                        //System.out.println("");
                     }
 
                     //começando a leitura do bloco
                     if (linha.contains("bloco")) {
 
-                        //DEBUG
-                        //System.out.println(linha);
-                        //System.out.println("");
-                        //System.out.println("");
-                        //System.out.println("Inicio da Construção do bloco");
-                        //começo a construir o bloco
                         /*
                         Enquanto a linha nao ler o fim do bloco e estiver tudo certo 
                         com o buffer eu continuo a ler e construir o bloco
@@ -78,6 +76,7 @@ public class Entrada_Dados {
                         transSimples = new ArrayList<>();
                         transBlocos = new ArrayList<>();
 
+                        //separando as informaçoes de cada linha
                         tokens = new ArrayList<>();
                         for (String palavra : linha.split(" ")) {
                             if (!(palavra.equals("−−"))) {
@@ -108,8 +107,8 @@ public class Entrada_Dados {
                                 linha = linha.trim();
 
                                 /*
-                            Pegando cada parte da linha que estiver seprado 
-                            por um espaço
+                                Pegando cada parte da linha que estiver seprado 
+                                por um espaço
                                  */
                                 tokens = new ArrayList<>();
                                 for (String palavra : linha.split(" ")) {
@@ -117,8 +116,6 @@ public class Entrada_Dados {
                                         tokens.add(palavra);
                                     }
                                 }
-                                //System.out.println(tokens.size());
-
                                 /*
                                 Verificando qual tipo de transição preciso adotar
                                  */
@@ -136,6 +133,7 @@ public class Entrada_Dados {
                                                 return false;
                                             }
                                             switch (tokens.get(4)) {
+                                                //transformando os estados de retorno e parada para inteiros
                                                 case "retorne":
                                                     destino = -1;
                                                     break;
@@ -143,6 +141,7 @@ public class Entrada_Dados {
                                                     destino = -2;
                                                     break;
                                                 default:
+                                                    //verificando se o destino atende as especificaçoes
                                                     destino = Integer.parseInt(tokens.get(4));
                                                     if (destino > 9999 || destino < -2) {
                                                         JOptionPane.showMessageDialog(null, "ID do estado fora do permitido!");
@@ -154,7 +153,8 @@ public class Entrada_Dados {
                                             JOptionPane.showMessageDialog(null, e.getMessage());
                                             return false;
                                         }
-
+                                        
+                                        //armazenando a leitura e a escrita
                                         String leitura = tokens.get(1);
                                         String escrita = tokens.get(2);
 
@@ -173,16 +173,18 @@ public class Entrada_Dados {
                                         transSimples.add(tran);
                                         break;
                                     /*
-                                caso tenha uma transicao do tipo que seja de bloco    
+                                    caso tenha uma transicao do tipo que seja de bloco    
                                      */
                                     case 3:
                                         try {
                                             origem = Integer.parseInt(tokens.get(0));
+                                            //verificando se a origem atende as especificacoes
                                             if (origem > 9999 || origem < -2) {
                                                 JOptionPane.showMessageDialog(null, "ID do estado fora do permitido!");
                                                 return false;
                                             }
                                             switch (tokens.get(2)) {
+                                                //definindo inteiros para os estados de saida e de parada
                                                 case "retorne":
                                                     destino = -1;
                                                     break;
@@ -190,6 +192,7 @@ public class Entrada_Dados {
                                                     destino = -2;
                                                     break;
                                                 default:
+                                                    //verificando se o destino atende as especificacoes
                                                     destino = Integer.parseInt(tokens.get(2));
                                                     if (destino > 9999 || destino < -2) {
                                                         JOptionPane.showMessageDialog(null, "ID do estado fora do permitido!");
@@ -201,7 +204,9 @@ public class Entrada_Dados {
                                             JOptionPane.showMessageDialog(null, e.getMessage());
                                             return false;
                                         }
-
+                                            
+                                        //adicionando a transicao de blocos
+                                        //no conjunto de transicoes de blocos
                                         trans = new TransicaoBloco(origem, destino, tokens.get(1));
                                         transBlocos.add(trans);
                                         break;
@@ -210,13 +215,12 @@ public class Entrada_Dados {
 
                             //Lendo a linha
                             linha = buffer.readLine();
-                            //System.out.println(linha);
-
                         }
+                        //Inserindo as transicoes no bloco
                         novo_bloco.setTransicoesSimples(transSimples);
                         novo_bloco.setTransicoesBlocos(transBlocos);
+                        //inserindo o novo bloco no conjunto de blocos
                         blocos.put(novo_bloco.getNome(), novo_bloco);
-                        //System.out.println("Fim da Construção do bloco");
                     }
 
                 }
